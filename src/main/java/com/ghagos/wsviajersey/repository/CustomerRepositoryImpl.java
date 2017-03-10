@@ -8,16 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.ghagos.wsviajersey.model.Customer;
+import com.ghagos.wsviajersey.utils.Utils;
 
 public class CustomerRepositoryImpl implements CustomerRepository {
-
-	private String jndiname = "jdbc/northwind";
 
 	@Resource(name = "jdbc/northwind")
 	private DataSource dataSource;
@@ -33,10 +29,9 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 			sqlQuery += " where city like '%" + city + "%'";
 		}
 		try {
-			Connection conn = getDbConn();
+			Connection conn = Utils.getDbConn(dataSource);
 			Statement stmt = conn.createStatement();
 			if (stmt != null) {
-				System.out.println(sqlQuery);
 				ResultSet rs = stmt.executeQuery(sqlQuery);
 				populateCustomers(customers, rs);
 				conn.close();
@@ -46,20 +41,6 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 		}
 
 		return customers;
-	}
-	
-	private Connection getDbConn() {
-		try {
-			Context ctx = new InitialContext();
-			dataSource = (DataSource) ctx.lookup("java:comp/env/" + jndiname);
-			return dataSource.getConnection();
-		} catch (NamingException e) {
-			throw new IllegalStateException(jndiname + " is missing in JNDI!", e);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	private void populateCustomers(List<Customer> customers, ResultSet rs) throws SQLException {
