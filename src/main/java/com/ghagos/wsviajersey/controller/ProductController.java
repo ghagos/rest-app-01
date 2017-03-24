@@ -8,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.ghagos.wsviajersey.model.ExpensiveProduct;
 import com.ghagos.wsviajersey.model.Product;
 import com.ghagos.wsviajersey.repository.ProductRepository;
 import com.ghagos.wsviajersey.repository.ProductRepositoryImpl;
@@ -24,5 +25,12 @@ public class ProductController {
 	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	public List<Product> getProducts(@QueryParam("discontinued") String discontinued) {
 		return productRepository.getProducts(discontinued);
+	}
+	
+	@GET
+	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	@Path("/expensive")
+	public List<ExpensiveProduct> getTenMostExpensive() {
+		return productRepository.getTenMostExpensive();
 	}
 }

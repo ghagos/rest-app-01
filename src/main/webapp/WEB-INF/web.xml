@@ -11,8 +11,7 @@
 		<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
 			<param-value>
-            	io.swagger.jaxrs.listing,
-            	com.ghagos.wsviajersey
+            	io.swagger.jaxrs.listing, com.ghagos.wsviajersey
             </param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>

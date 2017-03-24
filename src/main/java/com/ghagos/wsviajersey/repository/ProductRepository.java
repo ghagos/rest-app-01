@@ -2,6 +2,7 @@ package com.ghagos.wsviajersey.repository;
 
 import java.util.List;
 
+import com.ghagos.wsviajersey.model.ExpensiveProduct;
 import com.ghagos.wsviajersey.model.Product;
 
 public interface ProductRepository {
@@ -12,5 +13,12 @@ public interface ProductRepository {
 	 * @return
 	 */
 	List<Product> getProducts(String discountinued);
+	
+	/**
+	 * @see com.ghagos.wsviajersey.repository.ProductRepositoryImpl#getTenMostExpensive()
+	 * @param discountinued
+	 * @return
+	 */
+	List<ExpensiveProduct> getTenMostExpensive();
 
 }

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -18,16 +19,20 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 	@Resource(name = "jdbc/northwind")
 	private DataSource dataSource;
 	
+	private Logger logger = Logger.getLogger("logger");
+	
 	/**
 	 * Get all customers or customers for a given city
 	 */
 	@Override
-	public List<Customer> getCustomers(String city) {
+	public List<Customer> getCustomers(String country) {
 		List<Customer> customers = new ArrayList<>();
 		String sqlQuery = "select * from Customers";
-		if (city != null) {
-			sqlQuery += " where city like '%" + city + "%'";
+		if (country != null) {
+			sqlQuery += " where country like '%" + country + "%'";
 		}
+		logger.info(sqlQuery);
+		
 		try {
 			Connection conn = Utils.getDbConn(dataSource);
 			Statement stmt = conn.createStatement();
@@ -60,6 +65,76 @@ public class CustomerRepositoryImpl implements CustomerRepository {
 			customers.add(customer);
 			customer = null;
 		}
+	}
+
+	@Override
+	public List<Customer> getCustomerById(String id) {
+		List<Customer> customer = new ArrayList<>();
+		String sqlQuery = "select * from Customers where CustomerId = '" + id + "'";
+		logger.info(sqlQuery);
+		
+		try {
+			Connection conn = Utils.getDbConn(dataSource);
+			Statement stmt = conn.createStatement();
+			if (stmt != null) {
+				ResultSet rs = stmt.executeQuery(sqlQuery);
+				populateCustomers(customer, rs);
+				conn.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return customer;
+	}
+
+	@Override
+	public List<Customer> postCustomerById(String id) {
+		String sqlQuery = "INSERT INTO `northwind`.`Customers` (`CustomerID`,`CompanyName`,`ContactName`,`"
+				+ "ContactTitle`,`Address`,`City`,`Region`,`PostalCode`,`Country`,`Phone`,`Fax`)VALUES  "
+				+ "('" + id + "',"
+				+ "'Personal Company', 'Getachew Hagos', 'Sales Representative', '1323 E Tuodr St',"
+				+ "'Los Angeles', NULL, '91724', 'USA', '626-497-2212', '626-497-2212'  )";
+		
+		logger.info(sqlQuery);
+		int response = 0;
+		try {
+			Connection conn = Utils.getDbConn(dataSource);
+			Statement stmt = conn.createStatement();
+			if (stmt != null) {
+				response = stmt.executeUpdate(sqlQuery);
+				conn.close();
+				stmt.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (response != 0) {
+			return getCustomerById(id);
+		}
+		
+		return null;
+	}
+
+	@Override
+	public List<Customer> deleteCustomerById(String id) {
+		List<Customer> customer = getCustomerById(id);
+		String sqlQuery = "delete from Customers where CustomerId = '" + id + "'";
+		logger.info(sqlQuery);
+		
+		try {
+			Connection conn = Utils.getDbConn(dataSource);
+			Statement stmt = conn.createStatement();
+			if (stmt != null) {
+				stmt.executeUpdate(sqlQuery);
+				conn.close();
+				stmt.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return customer;
 	}
 
 }
