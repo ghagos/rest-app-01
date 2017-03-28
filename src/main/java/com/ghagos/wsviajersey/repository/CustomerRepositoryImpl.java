@@ -11,8 +11,8 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import com.ghagos.wsviajersey.Utils;
 import com.ghagos.wsviajersey.model.Customer;
-import com.ghagos.wsviajersey.utils.Utils;
 
 public class CustomerRepositoryImpl implements CustomerRepository {
 

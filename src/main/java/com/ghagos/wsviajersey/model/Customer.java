@@ -1,5 +1,8 @@
 package com.ghagos.wsviajersey.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Customer {
 
 	private String customerId;

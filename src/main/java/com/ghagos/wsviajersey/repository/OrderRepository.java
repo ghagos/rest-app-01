@@ -3,6 +3,7 @@ package com.ghagos.wsviajersey.repository;
 import java.util.List;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import com.ghagos.wsviajersey.model.Order;
 
@@ -34,7 +35,7 @@ public interface OrderRepository {
 	 * @see com.ghagos.wsviajersey.repository.OrderRepositoryImpl#postOrder(Order)
 	 * @return a response object.
 	 */
-	Response postOrder(Order order);
+	Response postOrder(Order order, UriInfo uriInfo);
 
 
 	/**

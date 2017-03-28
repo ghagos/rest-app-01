@@ -10,8 +10,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import com.ghagos.wsviajersey.model.Order;
 import com.ghagos.wsviajersey.repository.OrderRepository;
@@ -26,6 +28,9 @@ import io.swagger.annotations.ApiOperation;
 public class OrderController {
 
 	OrderRepository orderRepository = new OrderRepositoryImpl();
+	
+	@Context
+	private UriInfo uriInfo;
 	
 	@GET
 	@ApiOperation(value="Return all orders. Or given country, returns orders shipped to that country")
@@ -52,7 +57,7 @@ public class OrderController {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@ApiOperation(value="Creats an order and stores it to database")
 	public Response postOrder(Order order) {
-		return orderRepository.postOrder(order);
+		return orderRepository.postOrder(order, uriInfo);
 	}
 	
 	@DELETE

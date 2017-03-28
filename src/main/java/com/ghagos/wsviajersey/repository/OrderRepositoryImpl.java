@@ -7,10 +7,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -19,16 +17,14 @@ import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 
+import com.ghagos.wsviajersey.Utils;
+import com.ghagos.wsviajersey.model.Error;
 import com.ghagos.wsviajersey.model.Order;
-import com.ghagos.wsviajersey.utils.Utils;
 
 public class OrderRepositoryImpl implements OrderRepository {
 
 	@Resource(name = "jdbc/northwind")
 	private DataSource dataSource;
-	
-	@Context
-	private UriInfo uriInfo;
 	
 	private Logger logger = Logger.getLogger("logger");
 
@@ -98,10 +94,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 	}
 
 	@Override
-	public Response postOrder(Order order) {
+	public Response postOrder(Order order, UriInfo uriInfo) {
 		String sqlQuery = "INSERT INTO `Orders` "
-				//"(`OrderID`,`CustomerID`,`EmployeeID`,`OrderDate`,`RequiredDate`,`ShippedDate`,
-				//`ShipVia`,`Freight`,`ShipName`,`ShipAddress`,`ShipCity`,`ShipRegion`,`Ship PostalCode`,`ShipCountry`) "
 				+ "VALUES ("
 				+ order.getOrderId() + ","
 				+ "'" + order.getCustomerId() + "',"
@@ -119,20 +113,23 @@ public class OrderRepositoryImpl implements OrderRepository {
 				+ "'" + order.getShipCountry() + "')";
 		logger.info(sqlQuery);
 		
+		URI createdUri = uriInfo.getAbsolutePath();
+		
 		try {
 			QueryRunner run = Utils.getQueryRunner(dataSource);
-			ResultSetHandler<Order> h = new BeanHandler<>(Order.class);
-			order = run.insert(sqlQuery, h);
-		} catch (NamingException e) {
+			run.update(sqlQuery);
+		} catch (NamingException | SQLException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
+			Error error = new Error();
+			error.setDescription(e.getMessage());
+			error.setLink(createdUri.toString());
+			error.setCode(500);
+			
+			return Response.serverError().entity(error).build();
 		}
-		
-		
-		URI createdUri = uriInfo.getAbsolutePath();
-		return Response.created(createdUri).entity(order).build();
-		
+		URI cUri = URI.create("/" + order.getCustomerId() + "/" + order.getOrderId());
+		cUri = URI.create(createdUri.toString() + cUri.toString());
+		return Response.created(createdUri.resolve(cUri)).entity(order).build();
 	}
 
 	@Override

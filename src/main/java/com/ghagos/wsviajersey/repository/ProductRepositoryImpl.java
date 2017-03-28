@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import com.ghagos.wsviajersey.Utils;
 import com.ghagos.wsviajersey.model.ExpensiveProduct;
 import com.ghagos.wsviajersey.model.Product;
-import com.ghagos.wsviajersey.utils.Utils;
 
 public class ProductRepositoryImpl implements ProductRepository {
 

@@ -20,7 +20,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Path("customers")
-@Api(value = "customers", description = "List all Northwind customers")
+@Api(value = "Customers")
 @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 public class CustomerController {
 	CustomerRepository customerRepository = new CustomerRepositoryImpl();

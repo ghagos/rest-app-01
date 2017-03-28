@@ -1,4 +1,4 @@
-package com.ghagos.wsviajersey.utils;
+package com.ghagos.wsviajersey;
 
 import java.sql.Connection;
 import java.sql.SQLException;

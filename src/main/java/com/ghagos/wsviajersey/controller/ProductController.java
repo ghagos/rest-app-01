@@ -16,19 +16,18 @@ import com.ghagos.wsviajersey.repository.ProductRepositoryImpl;
 import io.swagger.annotations.Api;
 
 @Path("products")
-@Api(value = "products", description = "List of Northwind Products")
+@Api(value = "Products")
+@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 public class ProductController {
 	
 	ProductRepository productRepository = new ProductRepositoryImpl();
 
 	@GET
-	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	public List<Product> getProducts(@QueryParam("discontinued") String discontinued) {
 		return productRepository.getProducts(discontinued);
 	}
 	
 	@GET
-	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	@Path("/expensive")
 	public List<ExpensiveProduct> getTenMostExpensive() {
 		return productRepository.getTenMostExpensive();
