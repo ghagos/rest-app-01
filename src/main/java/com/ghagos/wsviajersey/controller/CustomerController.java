@@ -12,9 +12,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ghagos.wsviajersey.model.Customer;
 import com.ghagos.wsviajersey.repository.CustomerRepository;
-import com.ghagos.wsviajersey.repository.CustomerRepositoryImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,8 +24,11 @@ import io.swagger.annotations.ApiOperation;
 @Path("customers")
 @Api(value = "Customers")
 @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+@Component
 public class CustomerController {
-	CustomerRepository customerRepository = new CustomerRepositoryImpl();
+	
+	@Autowired
+	private CustomerRepository customerRepository;
 
 	@GET
 	@ApiOperation(value="List all customers. Or list customers for a country, given country as a query parameter.")

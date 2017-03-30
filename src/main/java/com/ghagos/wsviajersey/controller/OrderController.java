@@ -15,9 +15,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ghagos.wsviajersey.model.Order;
 import com.ghagos.wsviajersey.repository.OrderRepository;
-import com.ghagos.wsviajersey.repository.OrderRepositoryImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,9 +27,11 @@ import io.swagger.annotations.ApiOperation;
 @Path("orders")
 @Api(value = "Orders")
 @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+@Component
 public class OrderController {
 
-	OrderRepository orderRepository = new OrderRepositoryImpl();
+	@Autowired
+	private OrderRepository orderRepository;
 	
 	@Context
 	private UriInfo uriInfo;
