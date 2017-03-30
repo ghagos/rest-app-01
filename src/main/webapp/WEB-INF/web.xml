@@ -35,7 +35,7 @@
 		</init-param>
 		<init-param>
 			<param-name>swagger.api.basepath</param-name>
-			<param-value>http://localhost:8080/rest-app-01/webapi</param-value>
+			<param-value>/webapi</param-value>
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
