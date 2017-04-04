@@ -2,6 +2,7 @@ package com.ghagos.wsviajersey.controller;
 
 import java.util.List;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,6 +17,7 @@ import com.ghagos.wsviajersey.model.Product;
 import com.ghagos.wsviajersey.repository.ProductRepository;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Contact;
 import io.swagger.annotations.Info;
 import io.swagger.annotations.SwaggerDefinition;
@@ -37,7 +39,7 @@ import io.swagger.annotations.SwaggerDefinition;
 )
 @Path("products")
 @Api(value = "Products")
-@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Component
 public class ProductController {
 	
@@ -45,12 +47,14 @@ public class ProductController {
 	private ProductRepository productRepository;
 
 	@GET
-	public List<Product> getProducts(@QueryParam("discontinued") String discontinued) {
+	@ApiOperation(value="List all products or discontinued products or products still in production.")
+	public List<Product> getProducts(@DefaultValue("false") @QueryParam("discontinued") String discontinued) {
 		return productRepository.getProducts(discontinued);
 	}
 	
 	@GET
 	@Path("/expensive")
+	@ApiOperation(value="List top ten expensive products.")
 	public List<ExpensiveProduct> getTenMostExpensive() {
 		return productRepository.getTenMostExpensive();
 	}

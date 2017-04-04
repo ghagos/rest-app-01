@@ -2,7 +2,7 @@
 <head><title>Restful Web Services with Jersey</title></head>
 <body>
 	<h2>Restful Web Services with Jersey</h2>
-	<a href=<%=request.getRequestURL()%>/index.html>API Docs Via Swagger. </a> <br>
+	<a href=<%=request.getRequestURL() + "index.html"%> >API Docs Via Swagger. </a> <br>
 	
 	<div style="padding-left: 2em;">Note! After the page is
 	loaded, paste <font color='green'><i><%=request.getRequestURL()%>webapi/swagger.json</i></font>

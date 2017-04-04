@@ -12,7 +12,12 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.annotation.Resource;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 
 import com.ghagos.wsviajersey.Utils;
 import com.ghagos.wsviajersey.model.ExpensiveProduct;
@@ -40,19 +45,15 @@ public class ProductRepositoryImpl implements ProductRepository {
 			}
 		}
 		logger.info(sqlQuery);
+		
 		try {
-			Connection conn = Utils.getDbConn(dataSource);
-			if (conn != null) {
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery(sqlQuery);
-				populateProducts(products, rs);
-				conn.close();
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			QueryRunner run = Utils.getQueryRunner(dataSource);
+			ResultSetHandler<List<Product>> h = new BeanListHandler<>(Product.class);
+			products = run.query(sqlQuery, h);
+		} catch (NamingException | SQLException e1) {
+			e1.printStackTrace();
 		}
-
+		
 		return products;
 	}
 	
@@ -86,24 +87,4 @@ public class ProductRepositoryImpl implements ProductRepository {
 		
 		return products;
 	}
-
-	private void populateProducts(List<Product> products, ResultSet rs) throws SQLException {
-		while (rs.next()) {
-			Product product = new Product();
-			product.setProductID(rs.getInt("ProductID"));
-			product.setProductName(rs.getString("ProductName"));
-			product.setSupplierID(rs.getInt("SupplierID"));
-			product.setCategoryID(rs.getInt("CategoryID"));
-			product.setQuantityPerUnit(rs.getString("QuantityPerUnit"));
-			product.setUnitPrice(rs.getBigDecimal("UnitPrice"));
-			product.setUnitsInStock(rs.getShort("UnitsInStock"));
-			product.setUnitsOnOrder(rs.getShort("UnitsOnOrder"));
-			product.setReorderLevel(rs.getShort("ReorderLevel"));
-			product.setDiscontinued(rs.getBoolean("Discontinued"));
-
-			products.add(product);
-			product = null;
-		}
-	}
-
 }

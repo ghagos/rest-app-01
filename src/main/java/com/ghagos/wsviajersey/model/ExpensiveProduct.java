@@ -23,4 +23,9 @@ public class ExpensiveProduct {
 		this.pMap = pMap;
 	}
 
+	@Override
+	public String toString() {
+		return "ExpensiveProduct [pMap=" + pMap + "]";
+	}
+
 }

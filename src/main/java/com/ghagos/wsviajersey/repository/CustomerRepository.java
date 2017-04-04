@@ -2,6 +2,8 @@ package com.ghagos.wsviajersey.repository;
 
 import java.util.List;
 
+import javax.ws.rs.core.Response;
+
 import com.ghagos.wsviajersey.model.Customer;
 
 public interface CustomerRepository {
@@ -19,21 +21,21 @@ public interface CustomerRepository {
 	 * @param id
 	 * @return a customer for a given CustomerId.
 	 */
-	public List<Customer> getCustomerById(String id);
+	public Customer getCustomerById(String id);
 
 	/**
-	 * @see com.ghagos.wsviajersey.repository.CustomerRepositoryImpl#postCustomerById(String)
+	 * @see com.ghagos.wsviajersey.repository.CustomerRepositoryImpl#postCustomer(String)
 	 * @param CustomerId
 	 * @return a customer just posted to system.
 	 */
-	public List<Customer> postCustomerById(String id);
+	public Response postCustomer(String id);
 
 
 	/**
-	 * @see com.ghagos.wsviajersey.repository.CustomerRepositoryImpl#deleteCustomerById(String)
+	 * @see com.ghagos.wsviajersey.repository.CustomerRepositoryImpl#deleteCustomer(String)
 	 * @param CustomerId
 	 * @return a customer just deleted from the system.
 	 */
-	public List<Customer> deleteCustomerById(String id);
+	public Customer deleteCustomer(String id);
 	
 }

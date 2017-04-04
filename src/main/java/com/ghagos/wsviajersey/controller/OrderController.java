@@ -10,9 +10,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +57,16 @@ public class OrderController {
 	@Path("{customerId}/{orderId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value="Return an order for a given customer and order id")
-	public Order getOrderById(@PathParam("customerId") String customerId, @PathParam("orderId") int orderId) {
-		return orderRepository.getCustomerOrderById(customerId, orderId);
+	public Response getOrderById(@PathParam("customerId") String customerId, @PathParam("orderId") int orderId) {
+		Order order = orderRepository.getCustomerOrderById(customerId, orderId);
+		CacheControl cc = new CacheControl();
+		cc.setMaxAge(86400); // 24 * 60 * 60 
+		cc.setPrivate(true);
+		
+		ResponseBuilder builder = Response.ok(order);
+		builder.cacheControl(cc);
+		
+		return builder.build();
 	}
 	
 	@POST

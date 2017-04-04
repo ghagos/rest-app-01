@@ -2,6 +2,9 @@ package com.ghagos.wsviajersey.model;
 
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Product {
 
 	private int productID;
