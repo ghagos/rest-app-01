@@ -38,6 +38,7 @@ public class OrderController {
 	
 	@GET
 	@ApiOperation(value="Return all orders. Or given country, returns orders shipped to that country")
+	@Produces(MediaType.APPLICATION_JSON)
 	public List<Order> getOrders(@QueryParam("shipCountry") String country) {
 		return orderRepository.getOrders(country);
 	}
@@ -45,6 +46,7 @@ public class OrderController {
 	@GET
 	@Path("{customerId}")
 	@ApiOperation(value="Return orders for a given customer")
+	@Produces(MediaType.APPLICATION_XML)
 	public List<Order> getOrderByCustomerId(@PathParam("customerId") String customerId) {
 		return orderRepository.getOrderByCustomerId(customerId);
 	}

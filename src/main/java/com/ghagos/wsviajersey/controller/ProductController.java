@@ -16,7 +16,25 @@ import com.ghagos.wsviajersey.model.Product;
 import com.ghagos.wsviajersey.repository.ProductRepository;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.Contact;
+import io.swagger.annotations.Info;
+import io.swagger.annotations.SwaggerDefinition;
 
+@SwaggerDefinition(
+        info = @Info(
+                description = "Exposes Northwind database as a service",
+                version = "V1",
+                title = "Northwind API",
+                contact = @Contact(
+                   name = "Getachew Hagos", 
+                   email = "ghagos@gmail.com", 
+                   url = "https://github.com/ghagos"
+                )
+        ),
+        consumes = {"application/json", "application/xml"},
+        produces = {"application/json", "application/xml"},
+        schemes = {SwaggerDefinition.Scheme.HTTP, SwaggerDefinition.Scheme.HTTPS}
+)
 @Path("products")
 @Api(value = "Products")
 @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
