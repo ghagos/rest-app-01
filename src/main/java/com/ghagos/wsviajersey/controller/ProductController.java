@@ -28,7 +28,7 @@ import io.swagger.annotations.SwaggerDefinition;
                 contact = @Contact(
                    name = "Getachew Hagos", 
                    email = "ghagos@gmail.com", 
-                   url = "https://github.com/ghagos"
+                   url = "https://github.com/ghagos/rest-app-01"
                 )
         ),
         consumes = {"application/json", "application/xml"},
