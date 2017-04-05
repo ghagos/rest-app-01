@@ -45,4 +45,13 @@ public interface OrderRepository {
 	 */
 	Response deleteOrder(int orderId);
 
+
+	/**
+	 * Updates an existing order
+	 * @param order
+	 * @param uriInfo
+	 * @return the order just updated
+	 */
+	Response putOrder(Order order, UriInfo uriInfo);
+
 }

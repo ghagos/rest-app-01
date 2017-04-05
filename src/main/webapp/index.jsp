@@ -12,6 +12,8 @@
 	<h3>Sample Calls</h3>
 	<ul>
 		<li>Get all orders in JSON: <a href="webapi/orders">/orders</a></li>
+		<li>Get all orders shipped to USA: <a href="webapi/orders?shipCountry=USA">/orders?shipCountry=USA</a></li>
+		
 		<li>Get all orders belonging to a customer as XML: <a
 			href="webapi/orders/VINET">/orders/VINET</a></li>
 		<li>Get an order for a customer with an order id: <a

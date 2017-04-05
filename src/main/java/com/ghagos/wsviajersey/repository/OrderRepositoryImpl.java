@@ -25,7 +25,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
 	@Resource(name = "jdbc/northwind")
 	private DataSource dataSource;
-	
+
 	private Logger logger = Logger.getLogger("logger");
 
 	@Override
@@ -57,10 +57,10 @@ public class OrderRepositoryImpl implements OrderRepository {
 	@Override
 	public List<Order> getOrderByCustomerId(String customerId) {
 		List<Order> orders = new ArrayList<>();
-		
+
 		String sqlQuery = "select * from Orders where CustomerId = '" + customerId + "'";
 		logger.info(sqlQuery);
-		
+
 		try {
 			QueryRunner run = Utils.getQueryRunner(dataSource);
 			ResultSetHandler<List<Order>> h = new BeanListHandler<Order>(Order.class);
@@ -70,16 +70,16 @@ public class OrderRepositoryImpl implements OrderRepository {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return orders;
 	}
-	
+
 	@Override
 	public Order getCustomerOrderById(String customerId, int orderId) {
 		Order order = new Order();
 		String sqlQuery = "select * from Orders where CustomerId = '" + customerId + "' AND OrderId = " + orderId;
 		logger.info(sqlQuery);
-		
+
 		try {
 			QueryRunner run = Utils.getQueryRunner(dataSource);
 			ResultSetHandler<Order> h = new BeanHandler<>(Order.class);
@@ -89,32 +89,22 @@ public class OrderRepositoryImpl implements OrderRepository {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return order;
 	}
 
 	@Override
 	public Response postOrder(Order order, UriInfo uriInfo) {
-		String sqlQuery = "INSERT INTO `Orders` "
-				+ "VALUES ("
-				+ order.getOrderId() + ","
-				+ "'" + order.getCustomerId() + "',"
-				+ order.getEmployeeId() + ","
-				+ "'" + order.getOrderDate() + "',"
-				+ "'" + order.getRequiredDate() + "',"
-				+ "'" + order.getShippedDate() + "',"
-				+ order.getShipVia() + ","
-				+ order.getFreight() + ","
-				+ "'" + order.getShipName() + "',"
-				+ "'" + order.getShipAddress() + "',"
-				+ "'" + order.getShipCity() + "',"
-				+ "'" + order.getShipRegion() + "',"
-				+ "'" + order.getShipPostalCode() + "',"
-				+ "'" + order.getShipCountry() + "')";
+		String sqlQuery = "INSERT INTO `Orders` " + "VALUES (" + order.getOrderId() + "," + "'" + order.getCustomerId()
+				+ "'," + order.getEmployeeId() + "," + "'" + order.getOrderDate() + "'," + "'" + order.getRequiredDate()
+				+ "'," + "'" + order.getShippedDate() + "'," + order.getShipVia() + "," + order.getFreight() + "," + "'"
+				+ order.getShipName() + "'," + "'" + order.getShipAddress() + "'," + "'" + order.getShipCity() + "',"
+				+ "'" + order.getShipRegion() + "'," + "'" + order.getShipPostalCode() + "'," + "'"
+				+ order.getShipCountry() + "')";
 		logger.info(sqlQuery);
-		
+
 		URI createdUri = uriInfo.getAbsolutePath();
-		
+
 		try {
 			QueryRunner run = Utils.getQueryRunner(dataSource);
 			run.update(sqlQuery);
@@ -124,7 +114,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 			error.setDescription(e.getMessage());
 			error.setLink(createdUri.toString());
 			error.setCode(500);
-			
+
 			return Response.serverError().entity(error).build();
 		}
 		URI cUri = URI.create("/" + order.getCustomerId() + "/" + order.getOrderId());
@@ -136,7 +126,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 	public Response deleteOrder(int orderId) {
 		String sqlQuery = "delete from Orders where orderId = " + orderId;
 		logger.info(sqlQuery);
-		
+
 		try {
 			QueryRunner run = Utils.getQueryRunner(dataSource);
 			run.update(sqlQuery);
@@ -146,5 +136,11 @@ public class OrderRepositoryImpl implements OrderRepository {
 			e.printStackTrace();
 		}
 		return Response.ok().build();
+	}
+
+	@Override
+	public Response putOrder(Order newOrder, UriInfo uriInfo) {
+		deleteOrder(newOrder.getOrderId()); // remove existing order
+		return postOrder(newOrder, uriInfo);
 	}
 }

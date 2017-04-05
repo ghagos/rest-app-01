@@ -6,6 +6,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -60,7 +61,7 @@ public class OrderController {
 	public Response getOrderById(@PathParam("customerId") String customerId, @PathParam("orderId") int orderId) {
 		Order order = orderRepository.getCustomerOrderById(customerId, orderId);
 		CacheControl cc = new CacheControl();
-		cc.setMaxAge(86400); // 24 * 60 * 60 
+		cc.setMaxAge(300); // cache for 5 minutes.
 		cc.setPrivate(true);
 		
 		ResponseBuilder builder = Response.ok(order);
@@ -74,6 +75,13 @@ public class OrderController {
 	@ApiOperation(value="Creats an order and stores it to database")
 	public Response postOrder(Order order) {
 		return orderRepository.postOrder(order, uriInfo);
+	}
+	
+	@PUT
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@ApiOperation(value="Updates order")
+	public Response putOrder(Order order) {
+		return orderRepository.putOrder(order, uriInfo);
 	}
 	
 	@DELETE
